@@ -1,46 +1,115 @@
-# Getting Started with Create React App
+# UDS Assignment Components
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project contains two reusable, scalable React components built with TypeScript and modern best practices:
 
-## Available Scripts
+- **InputField**: A flexible input component with validation, variants, sizes, clear button, and password toggle.
+- **DataTable**: A data table with sorting, row selection, loading, and empty states.
 
-In the project directory, you can run:
+## Components Overview
 
-### `npm start`
+### InputField
+A customizable input component supporting:
+- Label, placeholder, helper text, error message
+- States: disabled, invalid, loading
+- Variants: filled, outlined, ghost
+- Sizes: small, medium, large
+- Optional: clear button, password toggle
+- Accessibility (ARIA labels)
+- Light & dark theme ready (customize CSS)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Props:**
+```ts
+interface InputFieldProps {
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
+  placeholder?: string;
+  helperText?: string;
+  errorMessage?: string;
+  disabled?: boolean;
+  invalid?: boolean;
+  variant?: 'filled' | 'outlined' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  loading?: boolean;
+  clearable?: boolean;
+  passwordToggle?: boolean;
+  type?: string;
+}
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### DataTable
+A generic, typed table component supporting:
+- Display of tabular data
+- Column sorting (click header)
+- Row selection (single/multiple)
+- Loading and empty states
+- Accessibility (ARIA)
 
-### `npm test`
+**Props:**
+```ts
+interface DataTableProps<T> {
+  data: T[];
+  columns: Column<T>[];
+  loading?: boolean;
+  selectable?: boolean;
+  onRowSelect?: (selectedRows: T[]) => void;
+}
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+interface Column<T> {
+  key: string;
+  title: string;
+  dataIndex: keyof T;
+  sortable?: boolean;
+}
+```
 
-### `npm run build`
+## Usage Example
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Import and use in your app:
+```tsx
+import { InputField } from './components/InputField';
+import { DataTable } from './components/DataTable';
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+// InputField
+<InputField
+  label="Username"
+  placeholder="Enter username"
+  clearable
+  passwordToggle
+  variant="outlined"
+  size="md"
+/>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+// DataTable
+const columns = [
+  { key: 'id', title: 'ID', dataIndex: 'id', sortable: true },
+  { key: 'name', title: 'Name', dataIndex: 'name', sortable: true },
+];
+const data = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+];
+<DataTable data={data} columns={columns} selectable />
+```
 
-### `npm run eject`
+## Storybook
+Run Storybook to view and interact with components:
+```bash
+npm run storybook
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Testing
+Run all tests:
+```bash
+npm test -- --watchAll=false
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Project Scripts
+- `npm start` – Start the development server
+- `npm run build` – Build for production
+- `npm run storybook` – Launch Storybook
+- `npm test` – Run tests
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+---
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+For more details, see the source code in `src/components/InputField` and `src/components/DataTable`.
